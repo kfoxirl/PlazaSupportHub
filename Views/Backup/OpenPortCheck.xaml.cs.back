@@ -1,0 +1,80 @@
+﻿using System.ComponentModel;
+using System.Windows;
+using System.Data;
+using System.Windows.Controls;
+using PlazaConnectivityChecker.Models;
+using System;
+
+namespace PlazaConnectivityChecker.Views
+{
+    /// <summary>
+    /// Interaction logic for OpenPortCheck.xaml
+    /// 
+    /// // To parse this JSON data, add NuGet 'Newtonsoft.Json' then do:
+    //
+    //    using QuickType;
+    //
+    //    var ports = Ports.FromJson(jsonString);
+    /// </summary>
+    public partial class OpenPortCheck : Page
+    {
+        public OpenPortCheck()
+        {
+            InitializeComponent();
+           
+            Style = GetStyle("Window-Black");
+            //PortCheckResult.Style = GetStyle("List-Modern");
+            
+
+            this.Loaded += new RoutedEventHandler(Page_Loaded);
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            this.dataGrid1.ItemsSource = PortCheckDT.GetTable().DefaultView;
+
+
+            var bw = new BackgroundWorker();
+            bw.DoWork += (o, args) => PortTestResults.CheckPort();
+            bw.RunWorkerCompleted += (o, args) => UpdatePortCheckResult();
+            bw.RunWorkerAsync();
+        }
+
+     
+
+        private void UpdatePortCheckResult()
+        {
+            // since the BackgroundWorker is designed to use
+            // the form's UI thread on the RunWorkerCompleted
+            // event, you should just be able to add the items
+            // to the list box:
+            
+
+            // the above should not block the UI, if it does
+            // due to some other code, then use the ListBox's
+            // Invoke method:
+            // listBox1.Invoke( new Action( () => listBox1.Items.AddRange( MyList.ToArray() ) ) );
+        }
+
+
+        private static Style GetStyle(string key)
+        {
+            var resource = Application.Current.FindResource(key);
+            return resource as Style;
+        }
+
+
+        
+
+
+
+
+
+
+
+
+}
+}
+
+

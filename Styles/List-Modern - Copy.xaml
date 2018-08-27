@@ -1,0 +1,135 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:PlazaConnectivityChecker="clr-namespace:PlazaConnectivityChecker"
+                    xmlns:src="clr-namespace:PlazaConnectivityChecker.Models"
+                    xmlns:local="clr-namespace:PlazaConnectivityChecker">
+
+
+
+
+
+    <src:PortTestResults x:Key="portTestResults" />
+    <local:BindingProxy x:Key="proxy" Data="{Binding}" />
+    <local:IntegerConverter x:Key="IntegerConverter" />
+
+
+
+
+
+    <Style TargetType="ListBox" x:Key="List-Modern">
+        <Style.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="DarkRed" Opacity=".15" />
+        </Style.Resources>
+        
+        <Setter Property="Background" Value="#19FFFFFF"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <DataTemplate.Resources>
+                        <PlazaConnectivityChecker:StarWidthConverter x:Key="StarWidthConverter" />
+                    </DataTemplate.Resources>
+                    <PlazaConnectivityChecker:ListItemGrid>
+                        <Grid.Resources>
+                            <Style TargetType="Label">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontFamily" Value="Arial"/>
+                                <Setter Property="Margin" Value="0"/>
+                            </Style>
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="1" />
+                        </Grid.RowDefinitions>
+
+                        <Rectangle Margin="4" Height="52" Width="52">
+                            <Rectangle.Fill>
+                                <ImageBrush ImageSource="{Binding Logo}" RenderOptions.BitmapScalingMode="HighQuality" Opacity="90"/>
+                            </Rectangle.Fill>
+                        </Rectangle>
+
+                        <StackPanel Grid.Column="1" Margin="5" >
+                            <Label Content="{Binding PortRole}" FontSize="16" FontWeight="Bold" />
+                          
+                            <StackPanel Orientation="Horizontal">
+                                <Label Foreground="GreenYellow" Content="Owner: "/>
+                                <Label Content="{Binding Owner}" />                              
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Foreground="GreenYellow" Content="Ports: "/>
+                                <Label Content="{Binding PortNumbers[0]}" />
+                                <Label Content="{Binding PortNumbers[1]}" />
+                            </StackPanel>
+                            <Expander Header="Port Role Details" >
+                                <StackPanel Orientation="Horizontal">
+                                <Label Foreground="GreenYellow" Content="Description: "/>
+                                <Label>
+                                    <TextBlock Text="{Binding Description}" Width="380" TextWrapping="WrapWithOverflow"/> 
+                                </Label>
+                            </StackPanel>
+                            </Expander>
+                        </StackPanel>
+
+                        <Grid Tag="{Binding PortAvailable}" Height="35" Width="35" Grid.Column="2" VerticalAlignment="Center" Margin="0,10,5,0">
+                            <Image Source="/Images/failure-x.png">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding PortAvailable}" Value="3">
+                                                <Setter Property="Source" Value="/Images/failure-x.png" />
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding PortAvailable}" Value="2">
+                                                <Setter Property="Source" Value="/Images/success-tick.jpg" />
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                                <Image.ToolTip>
+                                    <ToolTip  OverridesDefaultStyle="True" HasDropShadow="True" Padding="3">
+                                        <ToolTip.Template>
+                                            <ControlTemplate TargetType="ToolTip">
+                                                <Border BorderBrush="Blue" BorderThickness="1" Background="AliceBlue" CornerRadius="5">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="{Binding Logo}" Height="52" Margin="3" />
+                                                        <DockPanel>
+                                                            <StackPanel DockPanel.Dock="Left" Orientation="Vertical">
+                                                            <Label Content="Ports: "/>
+                                                                <Label Content="{Binding PortNumbers[0]}" />
+                                                                <Label Content="{Binding PortNumbers[1]}" Foreground="#000000"/>
+                                                                <Label Content="{Binding PortNumbers[2]}" Foreground="#000000" />
+                                                                <Label Content="{Binding PortNumbers[3]}" Foreground="#000000"/>
+                                                            </StackPanel>
+                                                            <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
+                                                                <Label Content="Ports: "/>
+                                                                <Label Content="{Binding PortAvailable}" Foreground="#000000" />
+                                                                <Label Content="{Binding PortAvailable}" Foreground="#000000"/>
+                                                                <Label Content="{Binding PortAvailable}" Foreground="#000000"/>
+                                                                <Label Content="{Binding PortAvailable}" Foreground="#000000"/>
+                                                            </StackPanel>
+                                                        </DockPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </ToolTip.Template>
+                                    </ToolTip>
+                                </Image.ToolTip>
+                            </Image>
+                        </Grid>
+                        
+                        <Rectangle Fill="#55ffffff" Grid.Row="1" Grid.ColumnSpan="3" />
+                    </PlazaConnectivityChecker:ListItemGrid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
